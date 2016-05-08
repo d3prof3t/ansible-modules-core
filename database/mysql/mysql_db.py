@@ -339,7 +339,8 @@ def main():
                 except Exception, e:
                     module.fail_json(msg="error creating database: " + str(e))
 
-    module.exit_json(changed=changed, db=db)
+            module.exit_json(changed=changed, db=db)
+        module.fail_json(msg="Database not found.")
 
 # import module snippets
 from ansible.module_utils.basic import *
