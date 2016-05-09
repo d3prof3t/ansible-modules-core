@@ -307,6 +307,8 @@ def main():
                     changed = db_delete(cursor, db)
                 except Exception, e:
                     module.fail_json(msg="error deleting database: " + str(e))
+            module.exit_json(changed=True, db=db)
+
         elif state == "dump":
             if module.check_mode:
                 module.exit_json(changed=True, db=db)
@@ -331,6 +333,16 @@ def main():
                     module.exit_json(changed=True, db=db, msg=stdout)
     else:
         if state == "present":
+            if module.check_mode:
+                changed = True
+            else:
+                try:
+                    changed = db_create(cursor, db, encoding, collation)
+                except Exception, e:
+                    module.fail_json(msg="error creating database: " + str(e))
+            module.exit_json(changed=changed, db=db)
+
+        elif state == "import":
             if module.check_mode:
                 changed = True
             else:
